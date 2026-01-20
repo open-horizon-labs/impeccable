@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import { cleanDir, ensureDir, writeFile, generateYamlFrontmatter, replacePlaceholders } from '../utils.js';
 
@@ -9,6 +10,10 @@ import { cleanDir, ensureDir, writeFile, generateYamlFrontmatter, replacePlaceho
  * Reference files are copied to skill subdirectories
  * Includes install.sh script for easy installation
  *
+ * @param {Array} commands - Parsed command objects
+ * @param {Array} skills - Parsed skill objects
+ * @param {string} distDir - Distribution output directory
+ * @param {Object|null} patterns - Unused; retained for API consistency with other transformers
  * @param {Object} options - Optional settings
  * @param {string} options.prefix - Prefix to add to command names (e.g., 'i-')
  * @param {string} options.outputSuffix - Suffix for output directory (e.g., '-prefixed')
@@ -80,7 +85,9 @@ export function transformOpenCode(commands, skills, distDir, patterns = null, op
 
   // Generate install.sh script
   const installScript = generateInstallScript(prefix);
-  writeFile(path.join(opencodeDir, 'install.sh'), installScript);
+  const installPath = path.join(opencodeDir, 'install.sh');
+  writeFile(installPath, installScript);
+  fs.chmodSync(installPath, 0o755);
 
   const refInfo = refCount > 0 ? ` (${refCount} reference files)` : '';
   const prefixInfo = prefix ? ` [${prefix}prefixed]` : '';

@@ -218,14 +218,16 @@ describe('transformOpenCode', () => {
     const originalLog = console.log;
     console.log = consoleMock;
 
-    const commands = [{ name: 'cmd1', description: 'Test', args: [], body: 'body' }];
-    const skills = [{ name: 'skill1', description: 'Test', license: '', body: 'body' }];
+    try {
+      const commands = [{ name: 'cmd1', description: 'Test', args: [], body: 'body' }];
+      const skills = [{ name: 'skill1', description: 'Test', license: '', body: 'body' }];
 
-    transformOpenCode(commands, skills, TEST_DIR);
+      transformOpenCode(commands, skills, TEST_DIR);
 
-    console.log = originalLog;
-
-    expect(consoleMock).toHaveBeenCalledWith('✓ OpenCode: 1 commands, 1 skills');
+      expect(consoleMock).toHaveBeenCalledWith('✓ OpenCode: 1 commands, 1 skills');
+    } finally {
+      console.log = originalLog;
+    }
   });
 
   test('should log reference file count', () => {
@@ -233,24 +235,26 @@ describe('transformOpenCode', () => {
     const originalLog = console.log;
     console.log = consoleMock;
 
-    const skills = [
-      {
-        name: 'skill1',
-        description: 'Test',
-        license: '',
-        body: 'body',
-        references: [
-          { name: 'ref1', content: 'ref1 content' },
-          { name: 'ref2', content: 'ref2 content' }
-        ]
-      }
-    ];
+    try {
+      const skills = [
+        {
+          name: 'skill1',
+          description: 'Test',
+          license: '',
+          body: 'body',
+          references: [
+            { name: 'ref1', content: 'ref1 content' },
+            { name: 'ref2', content: 'ref2 content' }
+          ]
+        }
+      ];
 
-    transformOpenCode([], skills, TEST_DIR);
+      transformOpenCode([], skills, TEST_DIR);
 
-    console.log = originalLog;
-
-    expect(consoleMock).toHaveBeenCalledWith('✓ OpenCode: 0 commands, 1 skills (2 reference files)');
+      expect(consoleMock).toHaveBeenCalledWith('✓ OpenCode: 0 commands, 1 skills (2 reference files)');
+    } finally {
+      console.log = originalLog;
+    }
   });
 
   test('should handle empty arrays', () => {
@@ -385,5 +389,8 @@ Second paragraph with details.
     expect(parsed.frontmatter.name).toBe('full-skill');
     expect(parsed.frontmatter.license).toBe('Apache 2.0');
     expect(parsed.frontmatter.compatibility).toBe('opencode');
+    // Verify optional fields are written (metadata parsing is limited in simple parser)
+    expect(content).toContain('allowed-tools: read,write');
+    expect(content).toContain('metadata:');
   });
 });
