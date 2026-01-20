@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install Impeccable commands and skills for OpenCode
-# https://github.com/open-horizon-labs/impeccable
+# https://github.com/pbakaus/impeccable
 
 
 set -e
