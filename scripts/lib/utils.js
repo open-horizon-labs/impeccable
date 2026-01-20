@@ -317,6 +317,11 @@ export const PROVIDER_PLACEHOLDERS = {
     model: 'GPT',
     config_file: 'AGENTS.md',
     ask_instruction: 'ask the user directly to clarify what you cannot infer.'
+  },
+  'opencode': {
+    model: 'the model',
+    config_file: 'opencode.json',
+    ask_instruction: 'ask the user directly to clarify what you cannot infer.'
   }
 };
 

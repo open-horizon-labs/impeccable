@@ -10,7 +10,7 @@ This repository uses a **feature-rich source format** that transforms into provi
 
 Different providers have different capabilities:
 - **Cursor**: No frontmatter or argument support
-- **Claude Code, Gemini, Codex**: Full support for metadata and arguments
+- **Claude Code, Gemini, Codex, OpenCode**: Full support for metadata and arguments
 
 By maintaining rich source files, we preserve maximum functionality where supported while still providing working (if simpler) versions for all providers.
 
@@ -98,6 +98,9 @@ source/                  → dist/
 
                            codex/prompts/*.md           (custom prompt format)
                            codex/skills/*/SKILL.md      (Agent Skills standard)
+
+                           opencode/commands/*.md       ($ARGUMENTS placeholder)
+                           opencode/skills/*/SKILL.md   (Agent Skills standard)
 ```
 
 ## Provider Transformations
@@ -131,6 +134,16 @@ source/                  → dist/
   - Uses same SKILL.md format as Claude Code
   - Reference files in subdirectories
 
+### OpenCode (Full Featured)
+- Commands → `dist/opencode/.opencode/commands/*.md`
+  - Frontmatter uses `description` only (no `name`, no `args` array)
+  - Placeholders transformed from `{{argname}}` to `$ARGUMENTS` (single args string)
+  - Invoked as `/normalize`, `/polish`, etc.
+- Skills → Agent Skills standard → `dist/opencode/.opencode/skills/{name}/SKILL.md`
+  - Uses same SKILL.md format as Claude Code
+  - Reference files in subdirectories
+- Includes `install.sh` script for easy installation
+
 ## Adding New Content
 
 ### 1. Create Source File
@@ -157,7 +170,7 @@ Add frontmatter and content following the format above.
 bun run build
 ```
 
-This generates all 4 provider formats automatically.
+This generates all 5 provider formats automatically.
 
 ### 3. Test
 
@@ -189,6 +202,7 @@ The build system (`scripts/build.js`) is a single ~170-line Node.js script with:
 - `transformClaudeCode()`: Keeps full format
 - `transformGemini()`: Converts to TOML + modular skills
 - `transformCodex()`: Full format + modular skills
+- `transformOpenCode()`: Description-only frontmatter + $ARGUMENTS placeholder
 
 ## Best Practices
 
@@ -218,6 +232,9 @@ The build system (`scripts/build.js`) is a single ~170-line Node.js script with:
 - [Gemini CLI Skills](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md)
 - [Codex CLI Slash Commands](https://developers.openai.com/codex/guides/slash-commands#create-your-own-slash-commands-with-custom-prompts)
 - [Codex CLI Skills](https://developers.openai.com/codex/skills/)
+- [OpenCode Commands](https://opencode.ai/docs/commands/)
+- [OpenCode Agent Skills](https://opencode.ai/docs/skills)
+- [OpenCode Configuration](https://opencode.ai/docs/config/)
 
 ## Repository Structure
 
@@ -232,7 +249,8 @@ impeccable/
 │   ├── cursor/
 │   ├── claude-code/
 │   ├── gemini/
-│   └── codex/
+│   ├── codex/
+│   └── opencode/
 ├── scripts/
 │   └── build.js         # Build system (~170 lines, zero deps)
 ├── package.json         # ESM project config

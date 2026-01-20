@@ -20,7 +20,8 @@ import {
   transformCursor,
   transformClaudeCode,
   transformGemini,
-  transformCodex
+  transformCodex,
+  transformOpenCode
 } from './lib/transformers/index.js';
 import { createAllZips } from './lib/zip.js';
 import { execSync } from 'child_process';
@@ -114,13 +115,14 @@ async function buildStaticSite() {
     return result;
   } catch (error) {
     console.error('Failed to build static site:', error.message);
-    console.error(error.stack);
+    if (error.stack) console.error(error.stack);
     if (error.logs) {
       for (const log of error.logs) {
         console.error(log.message || log);
       }
     }
-    process.exit(1);
+    console.warn('⚠️  Static site build failed, continuing with plugin builds...\n');
+    return null;
   }
 }
 
@@ -146,6 +148,7 @@ async function build() {
   transformClaudeCode(commands, skills, DIST_DIR, patterns);
   transformGemini(commands, skills, DIST_DIR, patterns);
   transformCodex(commands, skills, DIST_DIR, patterns);
+  transformOpenCode(commands, skills, DIST_DIR, patterns);
 
   // Transform for each provider (prefixed with i-)
   const prefixOptions = { prefix: 'i-', outputSuffix: '-prefixed' };
@@ -153,6 +156,7 @@ async function build() {
   transformClaudeCode(commands, skills, DIST_DIR, patterns, prefixOptions);
   transformGemini(commands, skills, DIST_DIR, patterns, prefixOptions);
   transformCodex(commands, skills, DIST_DIR, patterns, prefixOptions);
+  transformOpenCode(commands, skills, DIST_DIR, patterns, prefixOptions);
 
   // Create ZIP bundles (both unprefixed and prefixed)
   await createAllZips(DIST_DIR);
