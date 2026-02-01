@@ -2,27 +2,18 @@
   "name": "impeccable",
   "version": "1.0.0",
   "author": "Paul Bakaus",
-  "dependencies": {
-    "motion": "^12.23.26"
-  },
-  "description": "Cross-provider design skills and commands for LLM-powered development tools",
+  "description": "Cross-provider design skills for LLM-powered development tools",
   "keywords": [
-    "cursor",
+    "skills",
     "claude",
-    "gemini",
-    "codex",
+    "cursor",
     "design",
     "frontend",
     "ux"
   ],
   "license": "SEE LICENSE FILE",
-  "scripts": {
-    "build": "bun run scripts/build.js",
-    "clean": "rm -rf dist",
-    "rebuild": "bun run clean && bun run build",
-    "dev": "bun run server/index.js",
-    "start": "bun --production run server/index.js",
-    "test": "bun test"
-  },
-  "type": "module"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openhorizons/impeccable"
+  }
 }
