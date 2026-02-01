@@ -4,7 +4,7 @@ Design skills that help AI coding tools produce better frontend interfaces.
 
 ## Install
 
-Works with any coding agent that supports [skills](https://github.com/anthropics/skills).
+Works with any coding agent [supported by skills](https://github.com/anthropics/skills).
 
 ```bash
 npx skills add -y open-horizon-labs/impeccable
